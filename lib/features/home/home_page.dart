@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../shared/models/news_model.dart';
-import '../../shared/data/mock_news.dart';
 import '../../core/constants/app_colors.dart';
 import 'home_provider.dart';
 import 'widgets/weather_widget.dart';
@@ -160,7 +159,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<HomeProvider>();
-    final categories = MockNews.getCategories();
+    final categories = ['TODAS', 'Mercado', 'Tecnologia', 'Pecuária', 'Estratégia'];
 
     return Scaffold(
       body: RefreshIndicator(
