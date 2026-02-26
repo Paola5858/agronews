@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
+import 'core/constants/app_colors.dart';
 import 'features/home/home_page.dart';
 import 'features/market/market_page.dart';
 import 'features/strategy/strategy_page.dart';
