@@ -57,17 +57,21 @@ class _NewsTileState extends State<NewsTile> {
           ),
         );
       },
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) {
-          setState(() => _isPressed = false);
-          widget.onTap();
-        },
-        onTapCancel: () => setState(() => _isPressed = false),
-        child: AnimatedScale(
-          scale: _isPressed ? 0.97 : 1.0,
-          duration: const Duration(milliseconds: 100),
-          child: Container(
+      child: Semantics(
+        label: '${widget.news.categoria}: ${widget.news.titulo}',
+        hint: 'Toque para ler a notícia completa. Publicada ${widget.news.tempo}.',
+        button: true,
+        child: GestureDetector(
+          onTapDown: (_) => setState(() => _isPressed = true),
+          onTapUp: (_) {
+            setState(() => _isPressed = false);
+            widget.onTap();
+          },
+          onTapCancel: () => setState(() => _isPressed = false),
+          child: AnimatedScale(
+            scale: _isPressed ? 0.97 : 1.0,
+            duration: const Duration(milliseconds: 100),
+            child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -168,6 +172,7 @@ class _NewsTileState extends State<NewsTile> {
               ],
             ),
           ),
+        ),
         ),
       ),
     );
