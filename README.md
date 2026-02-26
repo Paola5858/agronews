@@ -50,9 +50,15 @@ Responsabilidade única. Sem lógica de UI misturada com dados.
 ## como rodar
 
 ```bash
+git clone https://github.com/Paola5858/agronews.git
+cd agronews
 flutter pub get
 flutter run
 ```
+
+**Requisitos:**
+- Flutter 3.x ou superior
+- Dart SDK 3.0+
 
 ---
 

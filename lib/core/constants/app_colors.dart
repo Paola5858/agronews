@@ -27,4 +27,21 @@ class AppColors {
   static const shimmerHighlight = Color(0xFFF5F5F5);
   static const shimmerBaseDark = Color(0xFF2A2A2A);
   static const shimmerHighlightDark = Color(0xFF3A3A3A);
+
+  static Color forCategory(String category) {
+    switch (category) {
+      case 'MERCADO':
+        return mercado;
+      case 'TECH':
+        return tech;
+      case 'PECUÁRIA':
+        return pecuaria;
+      case 'ESTRATÉGIA':
+        return estrategia;
+      case 'XADREZ DO AGRO':
+        return xadrezAgro;
+      default:
+        return verdeOliva;
+    }
+  }
 }

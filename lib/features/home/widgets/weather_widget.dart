@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
+/// Widget de clima mockado — dados simulados para demonstração
+/// Preparado para integração futura com API de clima
 class WeatherWidget extends StatefulWidget {
   const WeatherWidget({super.key});
 

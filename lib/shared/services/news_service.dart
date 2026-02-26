@@ -4,6 +4,8 @@ import '../models/news_model.dart';
 import '../data/mock_news.dart';
 
 class NewsService {
+  // Chave configurada via variável de ambiente em produção
+  // Para desenvolvimento local, use um arquivo .env com flutter_dotenv
   static const _apiKey = 'SUA_API_KEY_AQUI';
   static const _baseUrl = 'https://newsapi.org/v2/everything';
 

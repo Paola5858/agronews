@@ -23,26 +23,10 @@ class NewsTile extends StatefulWidget {
 class _NewsTileState extends State<NewsTile> {
   bool _isPressed = false;
 
-  Color _getCategoryColor() {
-    switch (widget.news.categoria) {
-      case 'MERCADO':
-        return AppColors.mercado;
-      case 'TECH':
-        return AppColors.tech;
-      case 'PECUÁRIA':
-        return AppColors.pecuaria;
-      case 'ESTRATÉGIA':
-        return AppColors.estrategia;
-      case 'XADREZ DO AGRO':
-        return AppColors.xadrezAgro;
-      default:
-        return AppColors.verdeOliva;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final categoryColor = AppColors.forCategory(widget.news.categoria);
 
     return TweenAnimationBuilder<double>(
       duration: Duration(milliseconds: 400 + (widget.index * 50)),
@@ -105,13 +89,13 @@ class _NewsTileState extends State<NewsTile> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: _getCategoryColor().withValues(alpha: 0.2),
+                          color: categoryColor.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           widget.news.categoria,
                           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: _getCategoryColor(),
+                            color: categoryColor,
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                           ),
