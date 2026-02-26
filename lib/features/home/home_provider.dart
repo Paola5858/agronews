@@ -29,7 +29,11 @@ class HomeProvider extends ChangeNotifier {
   void loadNews() async {
     _isLoading = true;
     notifyListeners();
-    _allNews = await NewsService.fetchAgroNews();
+    final service = NewsService();
+    _allNews = await service.fetchNews();
+    if (_allNews.isNotEmpty) {
+      _allNews.first.destaque = true;
+    }
     _isLoading = false;
     notifyListeners();
   }

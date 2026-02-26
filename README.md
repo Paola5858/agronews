@@ -23,6 +23,8 @@ Cada decisão é uma jogada. Cada safra é uma partida. Quem não percebe as era
 - **Google Fonts** — Cormorant Garamond (títulos) + Lora (corpo) + Montserrat (UI)
 - **Cached Network Image + Shimmer** — carregamento elegante
 - **Material 3** — design system moderno
+- **RSS Feed** — notícias em tempo real (Canal Rural + Agrolink)
+- **Timeago** — timestamps humanizados
 
 ---
 
@@ -36,7 +38,7 @@ lib/
 ├── features/
 │   ├── home/          → feed principal com filtros e destaque
 │   ├── market/        → cotações (em desenvolvimento)
-│   ├── strategy/      → xadrez do agro (decisões estratégicas)
+│   ├── strategy/      → fórum estratégico com discussões
 │   └── profile/       → perfil do usuário
 └── shared/
     ├── models/        → NewsModel com tempo de leitura
@@ -64,25 +66,30 @@ flutter run
 
 ## diferenciais
 
+- **Notícias em tempo real** — RSS feed de fontes confiáveis do agronegócio
+- **Fórum estratégico** — discussões categorizadas por peças de xadrez
 - **Tipografia editorial** — serif nos títulos, sans na UI (contraste intencional)
 - **Glassmorphism no dark mode** — cards com transparência e borda sutil
 - **Hero animations** — transição fluida entre lista e detalhe
 - **Barra de progresso de leitura** — feedback visual na tela de detalhe
 - **Clip path diagonal** — card de destaque com corte assimétrico
 - **Categorias com identidade** — cada uma tem cor e propósito
-- **Empty state com personalidade** — sem mensagens genéricas
+- **Timestamps humanizados** — "2h atrás" com timeago
 - **Sol animado** — rotação infinita no widget de clima
 
 ---
 
 ## próximos passos
 
-- [ ] integração com API de notícias
+- [x] integração com API de notícias (RSS)
+- [x] fórum estratégico com discussões
 - [ ] sistema de favoritos com persistência local
 - [ ] cotações de mercado em tempo real
 - [ ] modo "campo" (tema terroso alternativo)
 - [ ] notificações push para alertas estratégicos
 - [ ] compartilhamento de notícias
+- [ ] autenticação de usuários
+- [ ] sistema de likes e respostas no fórum
 
 ---
 
