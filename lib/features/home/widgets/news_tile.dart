@@ -105,7 +105,7 @@ class _NewsTileState extends State<NewsTile> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: _getCategoryColor().withValues(alpha: 0.15),
+                          color: _getCategoryColor().withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -113,6 +113,7 @@ class _NewsTileState extends State<NewsTile> {
                           style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: _getCategoryColor(),
                             fontSize: 10,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),

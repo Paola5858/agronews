@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
+import 'strategy_detail_page.dart';
 
 class StrategyPage extends StatelessWidget {
   const StrategyPage({super.key});
@@ -85,66 +86,76 @@ class StrategyPage extends StatelessWidget {
   Widget _buildJogadaCard(BuildContext context, Map<String, dynamic> jogada) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [
-                  AppColors.xadrezAgro.withValues(alpha: 0.3),
-                  AppColors.verdeOliva.withValues(alpha: 0.1),
-                ]
-              : [
-                  AppColors.verdeOliva.withValues(alpha: 0.08),
-                  AppColors.douradoTrigo.withValues(alpha: 0.05),
-                ],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.douradoTrigo.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            jogada['icone'] as IconData,
-            size: 36,
-            color: AppColors.douradoTrigo,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StrategyDetailPage(jogada: jogada),
           ),
-          const SizedBox(height: 12),
-          Text(
-            jogada['jogada'] as String,
-            style: GoogleFonts.montserrat(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 1.5,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: isDark
+                ? [
+                    AppColors.xadrezAgro.withValues(alpha: 0.3),
+                    AppColors.verdeOliva.withValues(alpha: 0.1),
+                  ]
+                : [
+                    AppColors.verdeOliva.withValues(alpha: 0.08),
+                    AppColors.douradoTrigo.withValues(alpha: 0.05),
+                  ],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: AppColors.douradoTrigo.withValues(alpha: 0.2),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              jogada['icone'] as IconData,
+              size: 36,
               color: AppColors.douradoTrigo,
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            jogada['titulo'] as String,
-            style: GoogleFonts.lora(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              height: 1.3,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: Text(
-              jogada['descricao'] as String,
-              style: GoogleFonts.lora(
-                fontSize: 13,
-                color: Colors.grey[600],
-                height: 1.4,
+            const SizedBox(height: 12),
+            Text(
+              jogada['jogada'] as String,
+              style: GoogleFonts.montserrat(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.5,
+                color: AppColors.douradoTrigo,
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              jogada['titulo'] as String,
+              style: GoogleFonts.lora(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                height: 1.3,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: Text(
+                jogada['descricao'] as String,
+                style: GoogleFonts.lora(
+                  fontSize: 13,
+                  color: isDark ? Colors.grey[400] : Colors.grey[600],
+                  height: 1.4,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

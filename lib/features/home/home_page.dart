@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../shared/models/news_model.dart';
 import '../../shared/data/mock_news.dart';
 import '../../core/constants/app_colors.dart';
@@ -60,6 +61,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _hasSeenNotifications = false;
+
   @override
   void initState() {
     super.initState();
@@ -83,6 +86,135 @@ class _HomePageState extends State<HomePage> {
       default:
         return AppColors.verdeOliva;
     }
+  }
+
+  void _showNotifications() {
+    setState(() => _hasSeenNotifications = true);
+    
+    final alertas = [
+      {'titulo': 'soja em alta', 'corpo': 'Chicago subiu 2.3% ontem. pode ser hora de revisar estoque.', 'tempo': 'há 15min', 'icone': Icons.trending_up},
+      {'titulo': 'janela de plantio', 'corpo': 'milho safrinha: 12 dias pra fechar a janela ideal no MT.', 'tempo': 'há 1h', 'icone': Icons.warning_amber_outlined},
+      {'titulo': 'nova linha de crédito', 'corpo': 'Pronaf lançou linha de irrigação a 5.5% ao ano. vale ler.', 'tempo': 'há 3h', 'icone': Icons.attach_money},
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) {
+          final isDark = Theme.of(context).brightness == Brightness.dark;
+          return Container(
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 12),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Text(
+                        'alertas',
+                        style: GoogleFonts.cormorantGaramond(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    controller: scrollController,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: alertas.length,
+                    itemBuilder: (context, index) {
+                      final alerta = alertas[index];
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: isDark 
+                            ? Colors.white.withValues(alpha: 0.05)
+                            : AppColors.fundoClaro,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppColors.douradoTrigo.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(
+                                alerta['icone'] as IconData,
+                                color: AppColors.douradoTrigo,
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        alerta['titulo'] as String,
+                                        style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        alerta['tempo'] as String,
+                                        style: GoogleFonts.lora(
+                                          fontSize: 12,
+                                          color: Colors.grey[500],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    alerta['corpo'] as String,
+                                    style: GoogleFonts.lora(
+                                      fontSize: 13,
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -113,20 +245,21 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.notifications_outlined),
-                      onPressed: () {},
+                      onPressed: _showNotifications,
                     ),
-                    Positioned(
-                      right: 8,
-                      top: 8,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: AppColors.douradoTrigo,
-                          shape: BoxShape.circle,
+                    if (!_hasSeenNotifications)
+                      Positioned(
+                        right: 8,
+                        top: 8,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: AppColors.douradoTrigo,
+                            shape: BoxShape.circle,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
                 const SizedBox(width: 8),
@@ -196,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'mude a categoria ou volte mais tarde.',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[500],
+                              color: AppColors.fundoEscuro.withValues(alpha: 0.45),
                             ),
                           ),
                         ],
@@ -267,6 +400,8 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Scaffold(
       body: Stack(
         children: [
@@ -313,21 +448,37 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          Icon(Icons.access_time, size: 14, color: Colors.grey[500]),
+                          Icon(
+                            Icons.access_time,
+                            size: 14,
+                            color: isDark 
+                              ? Colors.grey[400]
+                              : AppColors.fundoEscuro.withValues(alpha: 0.45),
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             widget.news.tempo,
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[500],
+                              color: isDark 
+                                ? Colors.grey[400]
+                                : AppColors.fundoEscuro.withValues(alpha: 0.45),
                             ),
                           ),
                           const SizedBox(width: 12),
-                          Icon(Icons.menu_book_outlined, size: 14, color: Colors.grey[500]),
+                          Icon(
+                            Icons.menu_book_outlined,
+                            size: 14,
+                            color: isDark 
+                              ? Colors.grey[400]
+                              : AppColors.fundoEscuro.withValues(alpha: 0.45),
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             widget.news.tempoLeitura,
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[500],
+                              color: isDark 
+                                ? Colors.grey[400]
+                                : AppColors.fundoEscuro.withValues(alpha: 0.45),
                             ),
                           ),
                         ],
