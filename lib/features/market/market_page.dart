@@ -178,7 +178,7 @@ class MarketPage extends StatelessWidget {
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  side: BorderSide(color: AppColors.verdeOliva, width: 1.5),
+                  side: const BorderSide(color: AppColors.verdeOliva, width: 1.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

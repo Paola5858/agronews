@@ -211,7 +211,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Switch(
             value: valor,
             onChanged: onChanged,
-            activeColor: AppColors.verdeOliva,
+            activeThumbColor: AppColors.verdeOliva,
           ),
         ],
       ),
