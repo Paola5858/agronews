@@ -19,17 +19,17 @@ class MarketPage extends StatelessWidget {
               Icon(
                 Icons.trending_up,
                 size: 80,
-                color: AppColors.mercadoVerde.withValues(alpha: 0.3),
+                color: AppColors.mercado.withValues(alpha: 0.3),
               ),
               const SizedBox(height: 24),
               Text(
-                'Dados de mercado em tempo real',
+                'dados de mercado em tempo real',
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
-                'Cotações, análises e projeções chegam em breve.\nEnquanto isso, observe o campo.',
+                'cotações, análises e projeções chegam em breve.\nenquanto isso, observe o campo.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[600],
                 ),

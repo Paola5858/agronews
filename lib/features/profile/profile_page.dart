@@ -20,24 +20,24 @@ class ProfilePage extends StatelessWidget {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: AppColors.verdeProfundo.withValues(alpha: 0.1),
+                  color: AppColors.verdeOliva.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.person_outline,
                   size: 40,
-                  color: AppColors.verdeProfundo,
+                  color: AppColors.verdeOliva,
                 ),
               ),
               const SizedBox(height: 24),
               Text(
-                'Seu perfil',
+                'seu perfil',
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
-                'Personalize sua experiência e acompanhe\nseu histórico de leitura.',
+                'personalize sua experiência e acompanhe\nseu histórico de leitura.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[600],
                 ),

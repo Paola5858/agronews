@@ -2,88 +2,83 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 
-/// ThemeData centralizado — light e dark mode completos
-/// Decisão: usar Inter para UI e Merriweather para títulos (contraste editorial)
+/// ThemeData com drama editorial — serif nos títulos, sans na UI
 class AppTheme {
   static ThemeData light() {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.brancoSuave,
-      primaryColor: AppColors.verdeProfundo,
+      scaffoldBackgroundColor: AppColors.fundoClaro,
+      primaryColor: AppColors.verdeOliva,
       colorScheme: const ColorScheme.light(
-        primary: AppColors.verdeProfundo,
-        secondary: AppColors.laranjaAmbar,
-        surface: AppColors.brancoSuave,
+        primary: AppColors.verdeOliva,
+        secondary: AppColors.douradoTrigo,
+        surface: AppColors.fundoClaro,
         error: Colors.red,
       ),
       
-      // Tipografia
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.merriweather(
-          fontSize: 32,
+        displayLarge: GoogleFonts.cormorantGaramond(
+          fontSize: 36,
           fontWeight: FontWeight.bold,
-          color: AppColors.pretoElegante,
+          letterSpacing: -0.5,
+          height: 1.1,
+          color: AppColors.fundoEscuro,
         ),
-        displayMedium: GoogleFonts.merriweather(
-          fontSize: 24,
+        displayMedium: GoogleFonts.cormorantGaramond(
+          fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: AppColors.pretoElegante,
+          letterSpacing: -0.5,
+          height: 1.2,
+          color: AppColors.fundoEscuro,
         ),
-        titleLarge: GoogleFonts.inter(
+        titleLarge: GoogleFonts.lora(
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          color: AppColors.pretoElegante,
+          color: AppColors.fundoEscuro,
         ),
-        titleMedium: GoogleFonts.inter(
+        titleMedium: GoogleFonts.lora(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: AppColors.pretoElegante,
+          color: AppColors.fundoEscuro,
         ),
-        bodyLarge: GoogleFonts.inter(
+        bodyLarge: GoogleFonts.lora(
           fontSize: 16,
-          color: AppColors.pretoElegante,
+          color: AppColors.fundoEscuro,
         ),
-        bodyMedium: GoogleFonts.inter(
+        bodyMedium: GoogleFonts.lora(
           fontSize: 14,
-          color: AppColors.pretoElegante,
+          color: AppColors.fundoEscuro,
         ),
-        labelSmall: GoogleFonts.inter(
+        labelSmall: GoogleFonts.montserrat(
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-          color: AppColors.verdeProfundo,
+          letterSpacing: 1.2,
+          color: AppColors.verdeOliva,
         ),
       ),
       
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.brancoSuave,
+        backgroundColor: AppColors.fundoClaro,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.merriweather(
-          fontSize: 24,
+        titleTextStyle: GoogleFonts.cormorantGaramond(
+          fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: AppColors.verdeProfundo,
+          color: AppColors.verdeOliva,
         ),
-        iconTheme: const IconThemeData(color: AppColors.verdeProfundo),
+        iconTheme: const IconThemeData(color: AppColors.verdeOliva),
       ),
       
       cardTheme: CardThemeData(
         color: Colors.white,
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-      
-      chipTheme: ChipThemeData(
-        backgroundColor: AppColors.begeAreia,
-        selectedColor: AppColors.verdeProfundo,
-        labelStyle: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
-        selectedItemColor: AppColors.verdeProfundo,
+        selectedItemColor: AppColors.verdeOliva,
         unselectedItemColor: Colors.grey[400],
         type: BottomNavigationBarType.fixed,
         elevation: 8,
@@ -97,80 +92,77 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.pretoElegante,
-      primaryColor: AppColors.begeAreia,
+      scaffoldBackgroundColor: AppColors.fundoEscuro,
+      primaryColor: AppColors.cremeSol,
       colorScheme: const ColorScheme.dark(
-        primary: AppColors.begeAreia,
-        secondary: AppColors.laranjaAmbar,
+        primary: AppColors.cremeSol,
+        secondary: AppColors.douradoTrigo,
         surface: Color(0xFF1A1A1A),
         error: Colors.redAccent,
       ),
       
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.merriweather(
-          fontSize: 32,
+        displayLarge: GoogleFonts.cormorantGaramond(
+          fontSize: 36,
           fontWeight: FontWeight.bold,
-          color: AppColors.begeAreia,
+          letterSpacing: -0.5,
+          height: 1.1,
+          color: AppColors.cremeSol,
         ),
-        displayMedium: GoogleFonts.merriweather(
-          fontSize: 24,
+        displayMedium: GoogleFonts.cormorantGaramond(
+          fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: AppColors.begeAreia,
+          letterSpacing: -0.5,
+          height: 1.2,
+          color: AppColors.cremeSol,
         ),
-        titleLarge: GoogleFonts.inter(
+        titleLarge: GoogleFonts.lora(
           fontSize: 20,
           fontWeight: FontWeight.w600,
-          color: AppColors.begeAreia,
+          color: AppColors.cremeSol,
         ),
-        titleMedium: GoogleFonts.inter(
+        titleMedium: GoogleFonts.lora(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: AppColors.begeAreia,
+          color: AppColors.cremeSol,
         ),
-        bodyLarge: GoogleFonts.inter(
+        bodyLarge: GoogleFonts.lora(
           fontSize: 16,
-          color: AppColors.begeAreia,
+          color: AppColors.cremeSol,
         ),
-        bodyMedium: GoogleFonts.inter(
+        bodyMedium: GoogleFonts.lora(
           fontSize: 14,
-          color: AppColors.begeAreia,
+          color: AppColors.cremeSol,
         ),
-        labelSmall: GoogleFonts.inter(
+        labelSmall: GoogleFonts.montserrat(
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-          color: AppColors.laranjaAmbar,
+          letterSpacing: 1.2,
+          color: AppColors.douradoTrigo,
         ),
       ),
       
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.pretoElegante,
+        backgroundColor: AppColors.fundoEscuro,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.merriweather(
-          fontSize: 24,
+        titleTextStyle: GoogleFonts.cormorantGaramond(
+          fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: AppColors.begeAreia,
+          color: AppColors.cremeSol,
         ),
-        iconTheme: const IconThemeData(color: AppColors.begeAreia),
+        iconTheme: const IconThemeData(color: AppColors.cremeSol),
       ),
       
       cardTheme: CardThemeData(
         color: const Color(0xFF1A1A1A),
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-      
-      chipTheme: ChipThemeData(
-        backgroundColor: const Color(0xFF2A2A2A),
-        selectedColor: AppColors.laranjaAmbar,
-        labelStyle: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: const Color(0xFF1A1A1A),
-        selectedItemColor: AppColors.laranjaAmbar,
+        selectedItemColor: AppColors.douradoTrigo,
         unselectedItemColor: Colors.grey[600],
         type: BottomNavigationBarType.fixed,
         elevation: 8,

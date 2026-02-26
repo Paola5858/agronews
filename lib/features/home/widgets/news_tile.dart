@@ -4,7 +4,6 @@ import 'package:shimmer/shimmer.dart';
 import '../../../shared/models/news_model.dart';
 import '../../../core/constants/app_colors.dart';
 
-/// Tile de notícia com micro interações e Hero animation
 class NewsTile extends StatefulWidget {
   final NewsModel news;
   final VoidCallback onTap;
@@ -21,22 +20,23 @@ class NewsTile extends StatefulWidget {
   State<NewsTile> createState() => _NewsTileState();
 }
 
-class _NewsTileState extends State<NewsTile> with SingleTickerProviderStateMixin {
+class _NewsTileState extends State<NewsTile> {
   bool _isPressed = false;
 
   Color _getCategoryColor() {
     switch (widget.news.categoria) {
       case 'MERCADO':
-        return AppColors.mercadoVerde;
+        return AppColors.mercado;
       case 'TECH':
-        return AppColors.techLaranja;
+        return AppColors.tech;
       case 'PECUÁRIA':
-        return AppColors.pecuariaAzul;
+        return AppColors.pecuaria;
       case 'ESTRATÉGIA':
+        return AppColors.estrategia;
       case 'XADREZ DO AGRO':
-        return AppColors.estrategiaDourado;
+        return AppColors.xadrezAgro;
       default:
-        return AppColors.verdeProfundo;
+        return AppColors.verdeOliva;
     }
   }
 
@@ -46,13 +46,13 @@ class _NewsTileState extends State<NewsTile> with SingleTickerProviderStateMixin
 
     return TweenAnimationBuilder<double>(
       duration: Duration(milliseconds: 400 + (widget.index * 50)),
-      curve: Curves.easeOut,
+      curve: Curves.easeOutBack,
       tween: Tween(begin: 0.0, end: 1.0),
       builder: (context, value, child) {
         return Opacity(
           opacity: value,
           child: Transform.translate(
-            offset: Offset(0, 20 * (1 - value)),
+            offset: Offset(0, 30 * (1 - value)),
             child: child,
           ),
         );
@@ -69,15 +69,29 @@ class _NewsTileState extends State<NewsTile> with SingleTickerProviderStateMixin
           duration: const Duration(milliseconds: 100),
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              color: isDark 
+                ? Colors.white.withValues(alpha: 0.05)
+                : Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: isDark 
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : Colors.transparent,
+                width: 1,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: _isPressed ? 0.15 : 0.05),
-                  blurRadius: _isPressed ? 15 : 10,
-                  offset: Offset(0, _isPressed ? 4 : 2),
+                  color: AppColors.douradoTrigo.withValues(alpha: isDark ? 0.0 : 0.08),
+                  blurRadius: 24,
+                  spreadRadius: 0,
+                  offset: const Offset(0, 8),
+                ),
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
@@ -89,10 +103,10 @@ class _NewsTileState extends State<NewsTile> with SingleTickerProviderStateMixin
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: _getCategoryColor().withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           widget.news.categoria,
@@ -102,14 +116,14 @@ class _NewsTileState extends State<NewsTile> with SingleTickerProviderStateMixin
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 10),
                       Text(
                         widget.news.titulo,
                         style: Theme.of(context).textTheme.titleMedium,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Icon(
@@ -130,11 +144,11 @@ class _NewsTileState extends State<NewsTile> with SingleTickerProviderStateMixin
                     ],
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 14),
                 Hero(
                   tag: 'news_image_${widget.news.id}',
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                     child: CachedNetworkImage(
                       imageUrl: widget.news.imagem,
                       width: 100,

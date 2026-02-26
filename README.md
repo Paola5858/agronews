@@ -1,16 +1,96 @@
-# agronews
+# Raiz
 
-A new Flutter project.
+> "quem planta sem visão, colhe sorte. quem planta com sistema, colhe legado."
 
-## Getting Started
+Plataforma editorial de inteligência estratégica para o agronegócio brasileiro.  
+Não é um portal agrícola. É uma mente analítica aplicada ao campo.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## conceito
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+O maior problema do agro não é o clima. É a falta de visão.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Raiz é um app de notícias que trata o agronegócio como xadrez, não como plantio.  
+Cada decisão é uma jogada. Cada safra é uma partida. Quem não percebe as eras, vira figurante.
+
+---
+
+## stack
+
+- **Flutter 3.x** — multiplataforma nativa
+- **Provider** — gerenciamento de estado reativo
+- **Google Fonts** — Cormorant Garamond (títulos) + Lora (corpo) + Montserrat (UI)
+- **Cached Network Image + Shimmer** — carregamento elegante
+- **Material 3** — design system moderno
+
+---
+
+## arquitetura
+
+```
+lib/
+├── core/
+│   ├── theme/         → ThemeData light/dark com tipografia editorial
+│   └── constants/     → paleta de cores com intenção
+├── features/
+│   ├── home/          → feed principal com filtros e destaque
+│   ├── market/        → cotações (em desenvolvimento)
+│   ├── strategy/      → xadrez do agro (decisões estratégicas)
+│   └── profile/       → perfil do usuário
+└── shared/
+    ├── models/        → NewsModel com tempo de leitura
+    └── data/          → mock de notícias temáticas
+```
+
+Responsabilidade única. Sem lógica de UI misturada com dados.
+
+---
+
+## como rodar
+
+```bash
+flutter pub get
+flutter run
+```
+
+---
+
+## diferenciais
+
+- **Tipografia editorial** — serif nos títulos, sans na UI (contraste intencional)
+- **Glassmorphism no dark mode** — cards com transparência e borda sutil
+- **Hero animations** — transição fluida entre lista e detalhe
+- **Barra de progresso de leitura** — feedback visual na tela de detalhe
+- **Clip path diagonal** — card de destaque com corte assimétrico
+- **Categorias com identidade** — cada uma tem cor e propósito
+- **Empty state com personalidade** — sem mensagens genéricas
+- **Sol animado** — rotação infinita no widget de clima
+
+---
+
+## próximos passos
+
+- [ ] integração com API de notícias
+- [ ] sistema de favoritos com persistência local
+- [ ] cotações de mercado em tempo real
+- [ ] modo "campo" (tema terroso alternativo)
+- [ ] notificações push para alertas estratégicos
+- [ ] compartilhamento de notícias
+
+---
+
+## identidade
+
+**Nome:** Raiz  
+**Posicionamento:** gestão inteligente do agro, não folclore rural  
+**Tom de voz:** direto, provocativo, estratégico  
+
+Frases que definem:
+- "o campo também tem eras. quem não percebe, vira figurante."
+- "timing do plantio é o primeiro peão do tabuleiro."
+- "uma fazenda sem dado é como um xadrez sem rainha."
+
+---
+
+**Desenvolvido com obsessão por arquitetura limpa e identidade visual.**

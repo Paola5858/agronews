@@ -1,5 +1,4 @@
 /// Modelo de dados para notícias
-/// Preparado para integração futura com API
 class NewsModel {
   final String id;
   final String titulo;
@@ -19,7 +18,13 @@ class NewsModel {
     this.destaque = false,
   });
 
-  // Factory para JSON (preparado para API futura)
+  int get minutosLeitura {
+    final palavras = resumo.split(' ').length;
+    return (palavras / 200).ceil();
+  }
+
+  String get tempoLeitura => '$minutosLeitura min de leitura';
+
   factory NewsModel.fromJson(Map<String, dynamic> json) {
     return NewsModel(
       id: json['id'],
