@@ -13,25 +13,25 @@ class StrategyPage extends StatelessWidget {
         'icone': Icons.circle_outlined,
         'jogada': 'peão',
         'titulo': 'A decisão que parece pequena',
-        'descricao': 'timing do plantio é o primeiro peão do tabuleiro. errar essa jogada contamina todas as outras.',
+        'descricao': 'timing do plantio é o primeiro peão do tabuleiro.',
       },
       {
         'icone': Icons.castle_outlined,
         'jogada': 'torre',
         'titulo': 'Estoque como poder',
-        'descricao': 'quem controla o armazenamento, controla o preço. a torre defende e avança ao mesmo tempo.',
+        'descricao': 'quem controla o armazenamento, controla o preço.',
       },
       {
         'icone': Icons.star_outline,
         'jogada': 'rainha',
         'titulo': 'Tecnologia multiplica tudo',
-        'descricao': 'uma fazenda sem dado é como um xadrez sem rainha. você joga, mas com metade do poder.',
+        'descricao': 'uma fazenda sem dado é como um xadrez sem rainha.',
       },
       {
         'icone': Icons.trending_up,
         'jogada': 'bispo',
         'titulo': 'Visão diagonal',
-        'descricao': 'mercado não é linha reta. quem enxerga só o óbvio, perde a jogada antes de começar.',
+        'descricao': 'mercado não é linha reta. quem enxerga só o óbvio, perde.',
       },
     ];
 
@@ -62,21 +62,7 @@ class StrategyPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 32),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.85,
-              ),
-              itemCount: jogadas.length,
-              itemBuilder: (context, index) {
-                final jogada = jogadas[index];
-                return _buildJogadaCard(context, jogada);
-              },
-            ),
+            ...jogadas.map((jogada) => _buildJogadaCard(context, jogada)),
           ],
         ),
       ),
@@ -96,6 +82,7 @@ class StrategyPage extends StatelessWidget {
         );
       },
       child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -116,43 +103,59 @@ class StrategyPage extends StatelessWidget {
             color: AppColors.douradoTrigo.withValues(alpha: 0.2),
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Icon(
-              jogada['icone'] as IconData,
-              size: 36,
-              color: AppColors.douradoTrigo,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              jogada['jogada'] as String,
-              style: GoogleFonts.montserrat(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.5,
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.douradoTrigo.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                jogada['icone'] as IconData,
+                size: 32,
                 color: AppColors.douradoTrigo,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              jogada['titulo'] as String,
-              style: GoogleFonts.lora(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                height: 1.3,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    jogada['jogada'] as String,
+                    style: GoogleFonts.montserrat(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.5,
+                      color: AppColors.douradoTrigo,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    jogada['titulo'] as String,
+                    style: GoogleFonts.lora(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      height: 1.3,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    jogada['descricao'] as String,
+                    style: GoogleFonts.lora(
+                      fontSize: 13,
+                      color: isDark ? Colors.grey[400] : Colors.grey[600],
+                      height: 1.4,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: Text(
-                jogada['descricao'] as String,
-                style: GoogleFonts.lora(
-                  fontSize: 13,
-                  color: isDark ? Colors.grey[400] : Colors.grey[600],
-                  height: 1.4,
-                ),
-              ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppColors.douradoTrigo.withValues(alpha: 0.5),
             ),
           ],
         ),

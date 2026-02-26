@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../shared/models/news_model.dart';
-import '../../shared/data/mock_news.dart';
+import '../../shared/services/news_service.dart';
 
 class HomeProvider extends ChangeNotifier {
   List<NewsModel> _allNews = [];
@@ -26,8 +26,11 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-  void loadNews() {
-    _allNews = MockNews.getNews();
+  void loadNews() async {
+    _isLoading = true;
+    notifyListeners();
+    _allNews = await NewsService.fetchAgroNews();
+    _isLoading = false;
     notifyListeners();
   }
 

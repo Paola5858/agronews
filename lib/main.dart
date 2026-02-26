@@ -2,22 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_colors.dart';
-import 'core/config/supabase_config.dart';
+import 'features/home/home_provider.dart';
 import 'features/home/home_page.dart';
 import 'features/market/market_page.dart';
 import 'features/strategy/strategy_page.dart';
 import 'features/profile/profile_page.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  try {
-    await SupabaseConfig.initialize();
-  } catch (e) {
-    debugPrint('Supabase initialization failed: $e');
-  }
-
-  runApp(
+void main() {  runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeProvider()),
