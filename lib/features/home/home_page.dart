@@ -3,12 +3,71 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../shared/models/news_model.dart';
 import '../../shared/data/mock_news.dart';
+import '../../shared/repositories/news_repository.dart';
 import '../../core/constants/app_colors.dart';
-import 'home_provider.dart';
+import '../../core/states/view_state.dart';
+import '../../core/errors/app_error.dart';
 import 'widgets/weather_widget.dart';
 import 'widgets/highlight_card.dart';
 import 'widgets/news_tile.dart';
 import 'widgets/category_pill.dart';
+import 'widgets/news_skeleton.dart';
+import 'widgets/error_view.dart';
+import 'widgets/favorite_button.dart';
+
+class HomeProvider extends ChangeNotifier {
+  final NewsRepository _repository = NewsRepository();
+
+  ViewState<List<NewsModel>> _state = const InitialState();
+  String _selectedCategory = 'TODAS';
+  List<NewsModel> _allNews = [];
+
+  ViewState<List<NewsModel>> get state => _state;
+  String get selectedCategory => _selectedCategory;
+
+  List<NewsModel> get filteredNews {
+    if (_selectedCategory == 'TODAS') {
+      return _allNews.where((n) => !n.destaque).toList();
+    }
+    return _allNews.where((n) => n.categoria == _selectedCategory && !n.destaque).toList();
+  }
+
+  NewsModel? get highlightNews {
+    return _repository.getHighlight(_allNews);
+  }
+
+  Future<void> loadNews({bool forceRefresh = false}) async {
+    _state = const LoadingState();
+    notifyListeners();
+
+    try {
+      _allNews = await _repository.getNews(forceRefresh: forceRefresh);
+
+      if (_allNews.isEmpty) {
+        _state = const EmptyState('nenhuma notícia disponível no momento.');
+      } else {
+        _state = SuccessState(_allNews);
+      }
+    } catch (e) {
+      if (e is AppError) {
+        _state = ErrorState(e);
+      } else {
+        _state = ErrorState(UnknownError());
+      }
+    }
+
+    notifyListeners();
+  }
+
+  void selectCategory(String category) {
+    _selectedCategory = category;
+    notifyListeners();
+  }
+
+  Future<void> refresh() async {
+    await loadNews(forceRefresh: true);
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,6 +85,23 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HomeProvider>().loadNews();
     });
+  }
+
+  Color _getCategoryColor(String category) {
+    switch (category) {
+      case 'MERCADO':
+        return AppColors.mercado;
+      case 'TECH':
+        return AppColors.tech;
+      case 'PECUÁRIA':
+        return AppColors.pecuaria;
+      case 'ESTRATÉGIA':
+        return AppColors.estrategia;
+      case 'XADREZ DO AGRO':
+        return AppColors.xadrezAgro;
+      default:
+        return AppColors.verdeOliva;
+    }
   }
 
   void _showNotifications() {
@@ -161,139 +237,179 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final provider = context.watch<HomeProvider>();
     final categories = MockNews.getCategories();
+    final state = provider.state;
 
     return Scaffold(
       body: RefreshIndicator(
         color: AppColors.verdeOliva,
         onRefresh: provider.refresh,
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              expandedHeight: 120,
-              floating: false,
-              pinned: true,
-              elevation: 0,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  'Raiz',
-                  style: Theme.of(context).appBarTheme.titleTextStyle,
-                ),
-                titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
+        child: _buildBody(state, provider, categories),
+      ),
+    );
+  }
+
+  Widget _buildBody(ViewState state, HomeProvider provider, List<String> categories) {
+    if (state is LoadingState) {
+      return const NewsSkeleton();
+    }
+
+    if (state is ErrorState) {
+      return ErrorView(
+        error: state.error,
+        onRetry: () => provider.loadNews(forceRefresh: true),
+      );
+    }
+
+    if (state is EmptyState) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.article_outlined,
+                size: 64,
+                color: AppColors.douradoTrigo.withValues(alpha: 0.5),
               ),
-              actions: [
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.notifications_outlined),
-                      onPressed: _showNotifications,
-                    ),
-                    if (!_hasSeenNotifications)
-                      Positioned(
-                        right: 8,
-                        top: 8,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: const BoxDecoration(
-                            color: AppColors.douradoTrigo,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                  ],
+              const SizedBox(height: 24),
+              Text(
+                state.message,
+                style: Theme.of(context).textTheme.titleMedium,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          expandedHeight: 120,
+          floating: false,
+          pinned: true,
+          elevation: 0,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text(
+              'Raiz',
+              style: Theme.of(context).appBarTheme.titleTextStyle,
+            ),
+            titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
+          ),
+          actions: [
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.notifications_outlined),
+                  onPressed: _showNotifications,
                 ),
-                const SizedBox(width: 8),
+                if (!_hasSeenNotifications)
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: AppColors.douradoTrigo,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
               ],
             ),
-
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: WeatherWidget(),
-                  ),
-                  const SizedBox(height: 24),
-                  if (provider.highlightNews != null)
-                    HighlightCard(
-                      news: provider.highlightNews!,
-                      onTap: () => _navigateToDetail(context, provider.highlightNews!),
-                    ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    height: 40,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        final category = categories[index];
-                        final isSelected = provider.selectedCategory == category;
-                        
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: CategoryPill(
-                            label: category,
-                            isSelected: isSelected,
-                            onTap: () => provider.selectCategory(category),
-                            accentColor: AppColors.forCategory(category),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
-
-            provider.filteredNews.isEmpty
-                ? SliverFillRemaining(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.filter_alt_off,
-                            size: 48,
-                            color: AppColors.douradoTrigo.withValues(alpha: 0.5),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'sem notícias nessa jogada',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'mude a categoria ou volte mais tarde.',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.fundoEscuro.withValues(alpha: 0.45),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final news = provider.filteredNews[index];
-                        return NewsTile(
-                          news: news,
-                          index: index,
-                          onTap: () => _navigateToDetail(context, news),
-                        );
-                      },
-                      childCount: provider.filteredNews.length,
-                    ),
-                  ),
-
-            const SliverToBoxAdapter(child: SizedBox(height: 80)),
+            const SizedBox(width: 8),
           ],
         ),
-      ),
+
+        SliverToBoxAdapter(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: WeatherWidget(),
+              ),
+              const SizedBox(height: 24),
+              if (provider.highlightNews != null)
+                HighlightCard(
+                  news: provider.highlightNews!,
+                  onTap: () => _navigateToDetail(context, provider.highlightNews!),
+                ),
+              const SizedBox(height: 24),
+              SizedBox(
+                height: 40,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    final category = categories[index];
+                    final isSelected = provider.selectedCategory == category;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: CategoryPill(
+                        label: category,
+                        isSelected: isSelected,
+                        onTap: () => provider.selectCategory(category),
+                        accentColor: _getCategoryColor(category),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+
+        provider.filteredNews.isEmpty
+            ? SliverFillRemaining(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.filter_alt_off,
+                        size: 48,
+                        color: AppColors.douradoTrigo.withValues(alpha: 0.5),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'sem notícias nessa jogada',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'mude a categoria ou volte mais tarde.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.fundoEscuro.withValues(alpha: 0.45),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final news = provider.filteredNews[index];
+                    return NewsTile(
+                      news: news,
+                      index: index,
+                      onTap: () => _navigateToDetail(context, news),
+                    );
+                  },
+                  childCount: provider.filteredNews.length,
+                ),
+              ),
+
+        const SliverToBoxAdapter(child: SizedBox(height: 80)),
+      ],
     );
   }
 
@@ -351,6 +467,10 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
               SliverAppBar(
                 expandedHeight: 300,
                 pinned: true,
+                actions: [
+                  FavoriteButton(news: widget.news),
+                  const SizedBox(width: 8),
+                ],
                 flexibleSpace: FlexibleSpaceBar(
                   background: Hero(
                     tag: 'news_image_${widget.news.id}',

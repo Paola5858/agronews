@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../models/news_model.dart';
 import '../data/mock_news.dart';
+import '../../core/errors/app_error.dart';
 
 class NewsService {
   // Chave configurada via variável de ambiente em produção
   // Para desenvolvimento local, use um arquivo .env com flutter_dotenv
   static const _apiKey = 'SUA_API_KEY_AQUI';
   static const _baseUrl = 'https://newsapi.org/v2/everything';
+  static const _timeout = Duration(seconds: 10);
 
   static Future<List<NewsModel>> fetchAgroNews() async {
     final uri = Uri.parse(
@@ -15,7 +18,8 @@ class NewsService {
     );
 
     try {
-      final response = await http.get(uri);
+      final response = await http.get(uri).timeout(_timeout);
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final articles = data['articles'] as List;
@@ -29,12 +33,19 @@ class NewsService {
           resumo: article['description'] ?? article['content'] ?? '',
           destaque: false,
         )).toList();
+      } else if (response.statusCode >= 500) {
+        throw ServerError(details: 'Status: ${response.statusCode}');
+      } else {
+        throw UnknownError(details: 'Status: ${response.statusCode}');
       }
+    } on SocketException {
+      throw NetworkError();
+    } on FormatException {
+      throw DataParsingError();
     } catch (e) {
-      // fallback pro mock se API falhar
+      if (e is AppError) rethrow;
+      return MockNews.getNews();
     }
-
-    return MockNews.getNews();
   }
 
   static String _inferirCategoria(String titulo) {
